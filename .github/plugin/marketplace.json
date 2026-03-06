@@ -1,0 +1,37 @@
+{
+  "name": "office-coding-agent",
+  "owner": {
+    "name": "Office Coding Agent",
+    "email": "sbroenne@users.noreply.github.com"
+  },
+  "metadata": {
+    "description": "Official plugins for Office Coding Agent — agents and skills for Excel, PowerPoint, Word, and Outlook",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "office-excel",
+      "source": "plugins/excel",
+      "description": "Excel agent and formulas skill for Office Coding Agent",
+      "version": "1.1.0"
+    },
+    {
+      "name": "office-powerpoint",
+      "source": "plugins/powerpoint",
+      "description": "PowerPoint agent and presentation skills for Office Coding Agent",
+      "version": "1.2.0"
+    },
+    {
+      "name": "office-word",
+      "source": "plugins/word",
+      "description": "Word agent and document skills for Office Coding Agent",
+      "version": "1.0.0"
+    },
+    {
+      "name": "office-outlook",
+      "source": "plugins/outlook",
+      "description": "Outlook agent and email skills for Office Coding Agent",
+      "version": "1.0.0"
+    }
+  ]
+}

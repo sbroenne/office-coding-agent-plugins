@@ -1,0 +1,13 @@
+{
+  "name": "office-outlook",
+  "description": "Outlook agent and email skills for Office Coding Agent",
+  "version": "1.0.0",
+  "author": {
+    "name": "Office Coding Agent",
+    "url": "https://github.com/sbroenne/office-coding-agent"
+  },
+  "license": "MIT",
+  "keywords": ["outlook", "email", "calendar", "office"],
+  "agents": "agents/",
+  "skills": "skills/"
+}
