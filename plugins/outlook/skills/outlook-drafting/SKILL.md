@@ -18,7 +18,7 @@ Activate this skill when the user wants to write, reply to, or forward emails.
 1. `get_mail_item` → understand context (sender, subject, recipients)
 2. `get_mail_body` → read what was said
 3. Compose response content
-4. `reply_to_mail` or `forward_mail` → send it
+4. `reply_to_mail` or `forward_mail` → open a prefilled reply/forward draft
 5. Confirm what was done
 
 ### New Email
