@@ -1,0 +1,20 @@
+{
+  "repository": "sbroenne/office-coding-agent",
+  "revision": "2b4656c0164b8da2f542047fa2525dfe8473eced",
+  "version": "0.7.0",
+  "sources": {
+    "src/tools/configs/range.config.ts": "8d60a8b38bd30e3ba9e28a0d262eaeb4c03d484f",
+    "src/tools/configs/rangeFormat.config.ts": "ad0e8986a542ed18fe21f307b9b8cb8d647be4eb",
+    "src/tools/configs/table.config.ts": "3e2af2eee5f2b2ce58c4a116962a9e462184ae24",
+    "src/tools/configs/chart.config.ts": "ab7e6ce5a9c69ae1b55e5ab87286538e1f995b40",
+    "src/tools/configs/sheet.config.ts": "899e50079434bab70bef2890cf13f3a86ae27a29",
+    "src/tools/configs/workbook.config.ts": "c47713e04eecb92a40cd9f849db7a0317493b124",
+    "src/tools/configs/comment.config.ts": "3eb8980f6991532d510cf4ab9d841d4523f17401",
+    "src/tools/configs/conditionalFormat.config.ts": "bebaabd382e1efc97dd930f0a9911569d67c31c2",
+    "src/tools/configs/dataValidation.config.ts": "3f4dd148cd4afbed0b441ebe96459e0538b42079",
+    "src/tools/configs/pivotTable.config.ts": "0e57b3363ff4d08746678b88df81daeade22d960",
+    "src/tools/powerpoint/index.ts": "eb4202a341d746a0041be1477dd6aaf02897b27d",
+    "src/tools/powerpoint/slideSpec.ts": "1b93a0ec0da3e3386a4cf5d093bef8128801b66c",
+    "src/tools/word/index.ts": "31e379b67ed3e4f7e0d55218d8c5ef7599299411"
+  }
+}

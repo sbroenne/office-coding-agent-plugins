@@ -1,65 +1,36 @@
 ---
 name: word-formatting
-description: >
-  Specialized skill for text formatting, paragraph styling, and visual refinement
-  in Word documents. Covers fonts, colors, spacing, and named styles.
-version: 1.0.0
+description: Consistent Word styles, readable text, and selection-safe visual refinement.
+version: 1.1.0
 license: MIT
 hosts: [word]
 ---
 
-# Formatting Skill
+# Word Formatting
 
-Activate this skill when formatting, styling, or visually refining document content.
+Use the live tool descriptions for available formatting fields. Read the
+selection and document structure before applying changes; follow the
+[core selection safeguards](../word/SKILL.md).
 
-## Font & Inline Formatting
+## Formatting Judgment
 
-Use `apply_style_to_selection` for inline formatting:
-- **bold**, *italic*, underline, strikethrough
-- Font name, size, color, highlight color
+- Prefer named paragraph styles for headings and structural text. Match the
+  existing document hierarchy instead of making ordinary body text look like
+  a heading through font changes alone.
+- Use inline formatting for emphasis, not as a substitute for structure.
+- Keep body font, size, spacing, and color consistent with surrounding text.
+- Apply paragraph spacing rather than inserting empty paragraphs to create gaps.
+- Preserve user-authored emphasis unless changing it is part of the request.
+- Keep contrast high and avoid using color as the only indicator of meaning.
 
-### Color Values
-- Use named colors or hex: `"#4472C4"`, `"red"`, `"#333333"`
-- Common professional palette:
-  - Headings: `"#1F3864"` (dark blue), `"#333333"` (charcoal)
-  - Body: `"#404040"` (dark gray)
-  - Accent: `"#4472C4"` (blue), `"#70AD47"` (green), `"#ED7D31"` (orange)
+## Workflow
 
-## Paragraph Styling
+1. Inspect selected text, its formatting, and nearby paragraphs.
+2. Decide whether the change belongs to selected text, whole paragraphs, or
+   specific search matches.
+3. Apply the narrowest supported formatting operation.
+4. Read back the affected content/formatting and check hierarchy and consistency.
 
-### Named Styles (`apply_paragraph_style`)
-Use built-in Word styles for consistent formatting:
-- `Heading 1`, `Heading 2`, `Heading 3` — section hierarchy
-- `Normal` — body text
-- `Title`, `Subtitle` — document title
-- `Quote`, `Intense Quote` — callout blocks
-- `List Paragraph` — for bulleted/numbered lists
-
-### Paragraph Format (`set_paragraph_format`)
-- **Alignment**: `left`, `center`, `right`, `justified`
-- **Spacing**: `spaceBefore`, `spaceAfter` (in points)
-- **Line spacing**: `lineSpacing` (in points), `lineUnitBefore`, `lineUnitAfter`
-- **Indentation**: `firstLineIndent`, `leftIndent`, `rightIndent` (in points)
-
-## Bulk Formatting with `format_found_text`
-
-Search for text patterns and apply formatting to all matches:
-1. Search term + bold/italic/color/highlight
-2. Great for highlighting key terms, names, or technical terms throughout the document
-
-## Common Patterns
-
-### Professional Document Formatting
-1. `get_document_overview` → understand structure
-2. Apply `Heading 1`/`Heading 2` styles to section headings
-3. Set body text to consistent font and size
-4. Adjust spacing between sections
-5. Verify with `get_document_content`
-
-### Highlight Key Terms
-1. `format_found_text` with search term + bold + color
-2. Repeat for each key term
-3. Verify result
-
-## Always Verify
-After any formatting change, re-read the affected content to confirm it looks correct.
+Search-based formatting can affect every match. Use it only when all matches
+should change, and inspect the results. Do not assume a body insertion selected
+the new paragraph for a subsequent formatting operation.

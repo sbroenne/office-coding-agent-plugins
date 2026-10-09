@@ -1,7 +1,7 @@
 {
   "name": "office-excel",
-  "description": "Excel agent and formulas skill for Office Coding Agent",
-  "version": "1.1.0",
+  "description": "Excel agent and workbook workflow skill for Office Coding Agent",
+  "version": "1.2.0",
   "author": {
     "name": "Office Coding Agent",
     "url": "https://github.com/sbroenne/office-coding-agent"

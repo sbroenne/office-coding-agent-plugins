@@ -2,9 +2,8 @@
 name: word-document-builder
 description: >
   Specialized skill for creating and restructuring Word documents. Covers
-  multi-section document creation, content planning, and the deep-mode
-  planner → worker orchestration workflow.
-version: 1.0.0
+  multi-section content planning and selection-safe section creation.
+version: 1.1.0
 license: MIT
 hosts: [word]
 ---
@@ -13,12 +12,12 @@ hosts: [word]
 
 Activate this skill when creating new documents, restructuring existing ones, or building multi-section content.
 
-## Deep Mode — Planner → Worker Orchestration
+## Thorough Planning
 
 When triggered by keywords like **"gründlich"**, **"deep"**, **"think"**, **"go deep"**, **"detail"**, **"ausführlich"**, **"thoroughly"**, use the deep planning workflow:
 
 ### Phase 1: Plan
-1. Read existing document with `get_document_overview` + `get_document_content`
+1. Read the current selection, document outline, and existing content.
 2. Create a structured plan:
    - Document title and purpose
    - Section outline (headings, subheadings)
@@ -27,12 +26,17 @@ When triggered by keywords like **"gründlich"**, **"deep"**, **"think"**, **"go
 
 ### Phase 2: Execute Section by Section
 For each planned section:
-1. Create heading with `insert_paragraph` + named style
-2. Insert content with `insert_content_at_selection` (HTML for rich content)
-3. Add tables, lists, images as needed
-4. **Verify** with `get_document_section` — read back what was written
-5. **Refine** if content is incomplete or formatting is off
-6. Move to next section
+1. Choose scope before writing. Use the [core safe insertion workflow](../word/SKILL.md).
+2. For document-end sections, append both heading and body paragraphs with
+   explicit `location: "End"` and named styles. Body insertion does not move
+   the selection; do not follow it with selection HTML as if it did.
+3. For rich content beside selected text, put the heading and body together
+   in one HTML insertion with explicit `location: "Before"` or `"After"`.
+   Do not accept the default Replace when adding content.
+4. Add tables, lists, and images only at a confirmed supported location;
+   selection-based tools do not automatically target the appended section.
+5. Read back the section and adjacent original content; check location and preservation.
+6. Refine if incomplete or incorrectly formatted, then move to the next section.
 
 ### Phase 3: Polish
 1. `get_document_overview` → verify final structure
@@ -80,6 +84,9 @@ Without deep triggers, work in a single pass:
 ## Always-On Rules
 
 - **Plan before writing** — even in fast mode, outline what you'll create
-- **Section by section** — never try to write an entire document in one tool call
+- **Coherent blocks** — build large documents section by section; short
+  documents may be inserted as a single block at a confirmed location.
 - **Verify everything** — read back every section after writing
 - **Match existing style** — if the document has content, match its tone and formatting
+- **Preserve selection content** — add beside it unless replacement was requested.
+- **Preserve language** — write in the user's requested language, not the tool's language.

@@ -1,0 +1,32 @@
+name: Plugin compatibility
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check repository and regression safeguards
+        run: node --test scripts/compatibility.test.mjs
+      - name: Read compatibility pin
+        id: contract
+        run: |
+          node --input-type=module -e "import fs from 'node:fs'; const pin = JSON.parse(fs.readFileSync('scripts/add-in-contract.json', 'utf8')); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'repository=' + pin.repository + '\nrevision=' + pin.revision + '\n');"
+      - name: Check out reviewed add-in source
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.contract.outputs.repository }}
+          ref: ${{ steps.contract.outputs.revision }}
+          path: .compatibility-add-in
+          persist-credentials: false
+      - name: Check real add-in contracts and slide parser
+        run: node scripts/check-compatibility.mjs --source-dir .compatibility-add-in
