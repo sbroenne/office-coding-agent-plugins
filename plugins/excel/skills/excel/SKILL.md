@@ -1,49 +1,43 @@
 ---
 name: excel
-description: General-purpose Excel skill for workbook analysis, transformation, reporting, and visualization tasks.
+description: Safe workbook analysis, transformation, reporting, visualization, and modeling workflows.
 license: MIT
 hosts: [excel]
 ---
 
-# Excel Default Skill
+# Excel Working Guide
 
-Use this as the default orchestration skill for Excel tasks.
+Use the active workbook and the live tool descriptions for available actions
+and arguments. Do not assume older standalone Excel tool names still exist.
+This skill adds workflow judgment, not a second tool reference.
 
 ## Operating Loop
 
-1. **Discover** — Inspect workbook structure and existing data first.
-2. **Read** — Read exact target ranges/tables before any mutation.
-3. **Execute** — Apply focused updates with the narrowest possible write scope.
-4. **Verify** — Re-read key outputs and confirm formulas/values are correct.
-5. **Summarize** — Finish with a concise plain-language change summary.
+1. Discover workbook structure and the user's selection before assuming scope.
+2. Read exact target values and formulas before modifying anything.
+3. Apply the smallest write that fulfills the request.
+4. Format values according to their meaning, then re-read important outputs.
+5. Summarize changes and any failures in the user's language.
 
-## Delegated Guidance
+## Safety and Quality
 
-Use the focused reference docs in `references/` when task depth requires it:
+- "These cells" means the current selection, not the whole used range.
+- Preserve formulas, headers, table structure, and unrelated worksheets.
+- Inspect formulas separately from values; displayed numbers do not reveal
+  whether a cell is calculated.
+- Read large ranges in pages. Keep track of offsets and do not analyze only
+  the first page as if it were the complete dataset.
+- Keep writes rectangular and match their dimensions to the exact destination.
+- Use explicit worksheet targets once discovered, rather than relying on the
+  active sheet remaining unchanged.
+- Distinguish missing values, zero, empty text, and formula errors.
+- Perform analysis using returned data; do not assume a separate analysis tool.
+- Report failed steps explicitly. Continue only steps that do not depend on
+  the failed result.
 
-- Data quality workflow: `references/data-quality.md`
-- Reporting workflow: `references/reporting.md`
-- Visualization workflow: `references/visualization.md`
-- Modeling workflow: `references/modeling.md`
+## Focused Workflows
 
-## Always-On Defaults
-
-- Prefer targeted updates over delete/rebuild operations.
-- Always apply formats after writes when data type is known.
-- Always finish with a clear summary of changes made.
-
-## High-Level Tool Guidance
-
-| Task                        | Primary Tool                                               |
-| --------------------------- | ---------------------------------------------------------- |
-| Discover workbook structure | `get_workbook_info`, `list_sheets`, `list_tables`          |
-| Inspect data before changes | `get_used_range`, `get_range_values`, `get_range_formulas` |
-| Write values/formulas       | `set_range_values`, `set_range_formulas`                   |
-| Apply formatting            | `set_number_format`, `format_range`, `auto_fit_columns`    |
-| Manage structured data      | `create_table`, `get_table_data`, `filter_table`           |
-| Build visuals               | `create_chart`, `set_chart_type`, `set_chart_title`        |
-| Build models/calculations   | `set_range_formulas`, `recalculate_workbook`, `analyze_data` |
-
-## Multi-Step Requests
-
-Execute all requested steps in sequence where possible. If one step fails, report the failure clearly and continue independent remaining steps.
+- [Data quality](references/data-quality.md): normalization and validation.
+- [Reporting](references/reporting.md): summaries, KPIs, and pivots.
+- [Visualization](references/visualization.md): chart choice and interpretation.
+- [Modeling](references/modeling.md): assumptions, formulas, and reconciliation.

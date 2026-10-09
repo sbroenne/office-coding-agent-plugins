@@ -1,82 +1,59 @@
 ---
 name: word-tables
-description: >
-  Specialized skill for creating, reading, and modifying tables in Word documents.
-  Covers table creation, row/column management, cell formatting, and data entry.
-version: 1.0.0
+description: Safe creation, structural changes, and verification of Word tables.
+version: 1.1.0
 license: MIT
 hosts: [word]
 ---
 
-# Tables & Structured Data Skill
+# Word Tables
 
-Activate this skill when working with tables, structured data, or tabular content in Word.
+Use live tool descriptions for arguments. Read the document outline and target
+table before changing it. Table/row/cell indices are 0-based and can change
+after structural edits; re-read them rather than reusing stale positions.
 
-## Table Creation
+## Creating a Table
 
-Use `insert_table` with a 2D data array:
+Confirm the selection/insertion location first. The table insertion tool works
+at the selection, not the document-end location of a previous body paragraph.
+Supply explicit row and column counts and rectangular string data; include
+headers in the data. Choose one of the supported simple styles, not an
+arbitrary named Word table style.
+
+```json
+{"tool":"insert_table","arguments":{"rows":3,"columns":2,"data":[["Metric","Value"],["Revenue","120"],["Cost","80"]],"style":"grid","hasHeaderRow":true}}
 ```
-[
-  ["Header 1", "Header 2", "Header 3"],
-  ["Row 1 Col 1", "Row 1 Col 2", "Row 1 Col 3"],
-  ["Row 2 Col 1", "Row 2 Col 2", "Row 2 Col 3"]
-]
+
+Verify the table's location, dimensions, headers, and contents after insertion.
+
+## Adding Rows and Columns
+
+Decide whether insertion belongs at Start or End. Supply the count explicitly.
+New row values are row-major and match the existing column count. New column
+values provide one row per existing table row, with the new column values
+inside each row (including header values if present).
+
+```json
+{"tool":"add_table_rows","arguments":{"tableIndex":0,"rowCount":1,"insertLocation":"End","values":[["Profit","40"]]}}
 ```
 
-### Style Options
-- `style`: Word table style name (e.g., `"Grid Table 4 - Accent 1"`)
-- First row is treated as header row
+```json
+{"tool":"add_table_columns","arguments":{"tableIndex":0,"columnCount":1,"insertLocation":"End","values":[["Owner"],["Sales"],["Finance"]]}}
+```
 
-## Reading Tables
+These examples are independent starting states, not a sequence: after adding
+rows, include those rows in subsequent new-column values too.
 
-1. `get_document_overview` → find how many tables exist
-2. `get_table_data` with `tableIndex` (0-based) → read cell contents
+## Editing and Removing Data
 
-## Modifying Tables
+Cell updates set text and optionally bold/background formatting. They are not
+general cell-style operations. Use the live tool contract's actual cell fields:
 
-### Add Rows
-`add_table_rows` with:
-- `tableIndex` — which table (0-based)
-- `rows` — 2D array of new row data
-- `insertAtEnd` — true to append, false to insert at beginning
+```json
+{"tool":"set_table_cell_value","arguments":{"tableIndex":0,"rowIndex":1,"cellIndex":1,"text":"125","bold":true,"shadingColor":"#E8F0FA"}}
+```
 
-### Add Columns
-`add_table_columns` with:
-- `tableIndex` — which table
-- `headers` — array of column headers
-- `data` — array of arrays for column data
-
-### Delete Rows
-`delete_table_row` with:
-- `tableIndex` — which table
-- `rowIndex` — which row to delete (0-based)
-
-### Update Cells
-`set_table_cell_value` with:
-- `tableIndex`, `rowIndex`, `columnIndex`
-- `value` — new text
-- `bold` — optional bold formatting
-- `shading` — optional background color
-
-## Workflow: Modify Existing Table
-
-1. `get_document_overview` → find tables
-2. `get_table_data(tableIndex)` → read current contents
-3. Apply changes (add rows, update cells, etc.)
-4. `get_table_data(tableIndex)` → verify result
-5. Fix if needed
-
-## Workflow: Create Data Table from Scratch
-
-1. Plan table structure (columns, rows)
-2. `insert_table` with header + data rows
-3. `get_table_data(tableIndex)` → verify
-4. Apply cell formatting if needed with `set_table_cell_value`
-5. Final verification
-
-## Tips
-
-- **Always read before modifying** — understand the current table structure
-- **Use descriptive headers** — clear column names
-- **Keep cell content concise** — tables work best with short text
-- **Verify after every change** — tables are easy to break
+Read the cell back, including surrounding content if it has multiple paragraphs;
+the tool updates the first paragraph, not a full rich-content cell replacement.
+Before deleting a row, confirm its content and purpose. Re-read the table after
+any edit, verify totals where relevant, and check that unrelated rows survived.

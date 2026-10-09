@@ -1,64 +1,44 @@
 ---
 name: powerpoint-deck-builder
-description: >
-  Specialized skill for creating new slide decks. Covers layout variety,
-  verification loops, and multi-slide deck workflows.
-version: 1.1.0
+description: Planning clear decks with varied layouts, concise content, and one-slide-at-a-time verification.
+version: 2.0.0
 license: MIT
 hosts: [powerpoint]
 ---
 
-# Deck Builder Skill
+# Deck Builder
 
-Activate this skill when creating new presentations or adding multiple slides.
+Follow the [core workflow](../powerpoint/SKILL.md) for selection, page size,
+JSON submission, and verification. Use live tool descriptions, not a copied
+tool manual.
 
-## Deck Creation Workflow
+## Plan the Story
 
-1. `get_presentation_overview` → understand current state
-2. **Plan layout types** for each slide before creating any (vary layouts!)
-3. For each slide: create → verify → fix → verify → next slide
-4. Summarize what was created
+Identify the audience, decision or takeaway, and available source material.
+Choose a short outline before building. Use
+[deck archetypes](../powerpoint-deck-archetypes/SKILL.md) as starting points,
+not mandatory slide counts. Do not invent data to fill an outline.
 
-## Layout Variety
+## Match Layout to Meaning
 
-**Do NOT default to title + bullet slides for everything.** Mix layouts:
+Use columns for comparisons, a chart for a supported data story, a callout for
+one important metric, and a table for a small structured comparison. Use
+dividers only when they help navigation. Avoid repeating the same layout for
+more than two consecutive slides unless consistency serves a clear purpose.
 
-- Title slides, bullet lists, two-column, three-column cards
-- Full-bleed color dividers, stat/number callouts, quote slides, tables
-- Match content to layout: comparisons → columns, metrics → stat callout, quotes → centered
+See [design](../powerpoint-design/SKILL.md), [charts](../powerpoint-charts/SKILL.md),
+and [formatting](../powerpoint-formatting/SKILL.md) for focused guidance.
 
-**Rule:** Never use the same layout for more than 2 consecutive slides.
+## Build and Refine
 
-## Create → Verify → Fix Loop
+Create one slide, inspect it, fix discovered issues, then continue. Check
+content as well as appearance: labels, units, source numbers, and the intended
+message. Add notes using the
+[speaker notes skill](../powerpoint-speaker-notes/SKILL.md).
 
-**This is the most important part. Run it for EVERY slide.**
+Shorten overflowing text, increase space, or split the slide rather than
+shrinking text until it is unreadable. Prefer two or three columns to four
+cramped ones. Keep layout variety purposeful, not decorative.
 
-```
-For each slide {
-  1. Create with add_slide_from_code
-  2. get_slide_image(region: "full") — overview check
-  3. get_slide_image(region: "bottom-left") + get_slide_image(region: "bottom-right")
-     → Zoomed 2x detail where text overflow happens
-  4. If ANY issue → fix → repeat from step 2
-  5. Move to next slide only when it looks right
-}
-```
-
-### Common fixes:
-| Problem | Fix |
-|---------|-----|
-| Text cut off at bottom | Shorten text or remove a bullet |
-| Text too small | Increase fontSize, reduce content to fit |
-| Word breaking mid-word | Use shorter synonym ("Medikamentenentwicklung" → "Arzneimittel") |
-| Too cramped | Reduce content or use fewer columns (4→3) |
-| Too many bullets with intro | Remove least important bullet |
-
-### Key principle:
-**If something looks wrong in `get_slide_image`, fix it and look again.** Don't move on until it looks right. Expect 1-3 fix cycles per slide.
-
-## Content Tips
-
-- **Keep text short** — punchy phrases, not full sentences
-- **Prefer 3 columns** over 4 — gives more room
-- **`shrinkText: true`** on all `addText()` as safety net
-- **If it overflows, shorten the text** — that's better than tiny fonts
+Do not force extra edit cycles when a slide is already correct. State any
+unavailable image/notes capability plainly in the final summary.

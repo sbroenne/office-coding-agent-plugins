@@ -1,25 +1,19 @@
 # Data Quality Workflow
 
 Use when cleaning, normalizing, validating, or repairing workbook data.
+Consult the live tool descriptions for action and argument details.
 
-## Workflow
+1. Profile the complete source, paging through large datasets. Identify blanks,
+   formula errors, inconsistent types, casing, and duplicates.
+2. Read formulas before changing cells. Normalize only known input values;
+   preserve headers and calculated columns.
+3. Resolve ambiguous dates, identifiers, and units conservatively. Do not strip
+   leading zeros from IDs or reinterpret dates without a clear source convention.
+4. Add input validation where it prevents recurrence. Choose whole-number,
+   decimal, list, date, or custom rules based on the business meaning.
+5. Re-read changed values and validation rules. Compare counts and check that
+   unrelated cells and formulas remain unchanged.
 
-1. Profile source ranges/tables and identify blanks, type mismatches, and duplicates.
-2. Normalize values, date formats, and casing with targeted updates.
-3. Validate with explicit rules where user input is expected.
-4. Verify by re-reading key ranges.
-
-## Rules
-
-- Never overwrite unknown formulas without reading them first.
-- Prefer targeted cell/range updates over full rewrites.
-- Preserve headers and table structure unless explicitly asked to redesign.
-- If values are ambiguous, apply the least destructive transformation.
-
-## Tool Patterns
-
-- Profile values: `get_used_range` -> `get_range_values`
-- Inspect formulas: `get_range_formulas`
-- Normalize values: `set_range_values`
-- Add constraints: `set_list_validation`, `set_number_validation`
-- Verify results: `get_range_values`
+For duplicate removal, decide which columns define identity and which record
+to retain before using a destructive operation. Formatting alone does not
+convert text into numbers or repair invalid dates.

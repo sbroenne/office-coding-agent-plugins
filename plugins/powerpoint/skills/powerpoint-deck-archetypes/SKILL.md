@@ -1,7 +1,7 @@
 ---
 name: powerpoint-deck-archetypes
 description: Common presentation templates — pitch deck, quarterly review, project status, training deck with slide-by-slide structure.
-version: 1.0.0
+version: 2.0.0
 license: MIT
 hosts: [powerpoint]
 ---
@@ -9,6 +9,14 @@ hosts: [powerpoint]
 # Deck Archetypes
 
 Use these slide-by-slide blueprints when the user asks for a standard presentation type. Each archetype specifies layout types, content density, and visual variety rules.
+
+Build with the [core workflow](../powerpoint/SKILL.md), live tool descriptions, and
+[deck builder](../powerpoint-deck-builder/SKILL.md). Confirm page size and
+compute numeric inch coordinates before serialization. Charts use only
+`bar`, `line`, `pie`, or `doughnut`; diagrams use supported shapes/text.
+Use plain string arrays for bullets, not rich text runs. These outlines are
+content suggestions, not additional tool capabilities. Never invent figures
+or sources to fill a chart.
 
 ## Global Rules
 
@@ -28,7 +36,8 @@ Use these slide-by-slide blueprints when the user asks for a standard presentati
 
 - **Never use the same layout for more than 2 consecutive slides.**
 - Alternate between text-heavy and visual slides (chart, table, stat callout).
-- Every deck should include at least one chart or table slide.
+- Include a chart or table when the content supports one; do not invent data
+  to satisfy a layout preference.
 - Use section dividers (full-bleed color slide with large heading) to separate major topics in decks > 8 slides.
 
 ### Color Accent Strategy
@@ -115,7 +124,9 @@ Use when: project update, sprint review, program status, steering committee.
 - Slide 1 title slide should include a prominent RAG indicator (colored circle or badge).
 - Use green/amber/red shapes for status indicators — not just text colors.
 - Timeline (slide 3) should visually distinguish completed milestones (filled) from upcoming (outline).
-- Budget chart (slide 4) uses grouped bars: planned (gray), actual (accent), forecast (dashed outline).
+- Budget chart (slide 4) uses bar series: planned (gray), actual (accent),
+  forecast (secondary solid color). The JSON chart contract has no dashed
+  series styling option.
 
 ---
 

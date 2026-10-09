@@ -1,81 +1,45 @@
 ---
 name: powerpoint-redesign
-description: >
-  Specialized skill for redesigning existing slides and adapting templates.
-  Covers shape manipulation, template adaptation pitfalls, and redesign workflows.
-version: 1.0.0
+description: Preserve content and notes while improving slide readability or adapting a template.
+version: 2.0.0
 license: MIT
 hosts: [powerpoint]
 ---
 
-# Redesign Skill
+# Redesign and Template Adaptation
 
-Activate this skill when redesigning existing slides, adapting templates, or modifying the visual layout of existing content.
+Follow the [core workflow](../powerpoint/SKILL.md) and live tool descriptions.
+Read the selected slide, its image, text, shapes, and notes before changing it.
+Confirm page size before computing a new layout.
 
-## Redesign Workflow
+## Preserve What Matters
 
-1. `get_selected_slides` → which slide
-2. `get_slide_image` → see current visual design
-3. `get_presentation_content` → read the text content
-4. `get_slide_shapes` → understand shape layout and positions
-5. `add_slide_from_code` with `replaceSlideIndex` → first draft
-6. `get_slide_image` → inspect result (assume issues exist — find them)
-7. Refine and re-verify until polished
+Separate requested changes from content/design that must survive. A text-only
+duplicate does not preserve complex graphics. Whole-slide replacement removes
+the original shapes and notes; it is not an overlay. Preserve required content
+and restore notes if replacement is necessary.
 
-## Template Modification Workflow
+Prefer targeted text, style, or position changes for small edits. Use full
+replacement only when the layout genuinely needs rebuilding.
 
-1. `get_presentation_overview` → full structure
-2. `get_slide_image` on each relevant slide → visual analysis
-3. `get_slide_layouts` → available layouts in this deck
-4. Plan which slides to keep, modify, delete, or add
-5. Make structural changes first (delete/add/reorder slides)
-6. Then edit content on each slide
-7. Verify each modified slide with `get_slide_image`
+## Adapt the Template
 
-## Template Adaptation Pitfalls
+Plan which slides to keep, add, remove, or reorder, then re-read indices after
+structural changes. Inspect layouts rather than assuming the template has a
+particular master or placeholder arrangement.
 
-### Content count mismatch
-When source content has fewer items than the template expects:
-- **Remove excess elements entirely** — don't just clear text from shapes
-- Use `delete_shape` to remove unneeded shapes
-- Use `get_slide_shapes` to identify what to remove
-- Verify visually that layout still works after removal
+If there are fewer content items than template slots, remove unused elements
+and rebalance spacing. If there are more, split the material across slides
+instead of crowding it or silently dropping meaningful content.
 
-When source content has more items than space allows:
-- Split across multiple slides rather than cramming
-- Consider truncating or summarizing to fit
+Longer replacement text may wrap or overflow. Shorten it without changing
+meaning, adjust the supported font styling or box size, and inspect again.
+Do not assume the position tool also changes font size or the style tool can
+edit every border/effect.
 
-### Text length mismatch
-- **Shorter replacements**: Usually safe
-- **Longer replacements**: May overflow text boxes or wrap unexpectedly
-- Always verify with `get_slide_image` after text changes
-- Adjust font size or box dimensions with `move_resize_shape` if needed
+## Verify
 
-## Shape Manipulation Guide
-
-### Reading shapes
-- `get_slide_shapes` → full list with indices, types, positions, sizes
-- Use shape indices (0-based) for targeted modifications
-
-### Modifying shapes
-- `update_slide_shape` or `set_shape_text` → change text content
-- `update_shape_style` → change fill color, border, font properties
-- `move_resize_shape` → reposition or resize (x, y, w, h in inches)
-- `delete_shape` → remove a specific shape by index
-
-### When to replace vs. modify
-- **Modify** when changing text or minor styling (faster, preserves other shapes)
-- **Replace** with `add_slide_from_code` + `replaceSlideIndex` when the layout needs fundamental changes
-- Always `get_slide_image` after replacement to verify
-
-## Iterative Verification — MANDATORY
-
-**You MUST call `get_slide_image` after EVERY modification. No exceptions.**
-
-1. Make changes
-2. `get_slide_image` → inspect result
-3. Check: text cut off? Words breaking? Overlap? Missing content?
-4. If ANY issue → fix with `replaceSlideIndex` → go back to step 2
-5. Only declare done when a full pass shows zero issues
-
-Expect 2-3 fix cycles per slide. If you verify a slide only once, you probably missed something.
+Check clipping, overlap, missing content, and consistency with neighboring
+slides. Prefer a targeted correction over another full replacement. Re-read
+shape indices after structural edits. If image capture is unavailable, explain
+that limit rather than claiming visual verification.

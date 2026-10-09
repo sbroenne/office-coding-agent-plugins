@@ -1,32 +1,17 @@
 # Modeling Workflow
 
-Use when requests involve formulas, assumptions, dependencies, scenario logic, or model refactoring.
+Use for formulas, assumptions, dependencies, scenarios, or model refactoring.
+Use the live tool descriptions for the available formula and recalculation actions.
 
-## Principles
+1. Identify inputs and outputs. Keep assumptions in explicit cells/tables,
+   separate from calculated results.
+2. Read existing formulas and values. Understand relative/absolute references
+   and dependencies before writing.
+3. Write the smallest formula block first, then read it back before filling
+   or copying across the rest of the model.
+4. Recalculate after changes, then read outputs rather than trusting cached values.
+5. Reconcile subtotals and grand totals. Check signs, units, and order of magnitude.
 
-- Keep assumptions in explicit input cells/tables, separate from calculated outputs.
-- Use predictable row/column structure so formulas can be filled or copied safely.
-- Prefer readable formulas over compact but opaque expressions.
-- Reuse shared assumptions to avoid drift across sheets.
-
-## Workflow
-
-1. Identify input ranges and expected output ranges before writing formulas.
-2. Write formulas in the minimal target range first.
-3. Re-read formulas to confirm references and relative/absolute behavior.
-4. Trigger recalculation when model changes are complete.
-5. Re-read key outputs and sanity-check totals/signs/order of magnitude.
-
-## Quality Checks
-
-- Validate that totals reconcile (subtotals roll up to grand totals).
-- Spot-check boundary cases (zero, blank, negative, large values).
-- Confirm copied formulas preserve intended references.
-- Flag circular references or volatile formula overuse when detected.
-
-## Tool Patterns
-
-- Read model state: `get_range_values`, `get_range_formulas`
-- Apply formulas: `set_range_formulas`
-- Recalculate: `recalculate_workbook`
-- Structure check: `analyze_data`
+Spot-check zero, blank, negative, and unusually large inputs. Reuse shared
+assumptions across sheets. Flag detected circular references or unnecessary
+volatile formulas rather than quietly replacing the model.
